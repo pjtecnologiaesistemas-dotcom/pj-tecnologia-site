@@ -113,6 +113,19 @@
   .navtoggle{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:6px;}
   .navtoggle span{width:24px;height:2px;background:var(--cyan2);display:block;transition:.3s;}
 
+  .nav-overlay{
+    position:fixed;inset:0;background:rgba(6,13,26,.6);backdrop-filter:blur(2px);
+    opacity:0;visibility:hidden;transition:opacity .3s ease,visibility .3s ease;z-index:55;
+  }
+  .nav-overlay.open{opacity:1;visibility:visible;}
+  body.nav-locked{overflow:hidden;}
+  .navclose{
+    display:none;position:absolute;top:26px;right:28px;width:38px;height:38px;
+    align-items:center;justify-content:center;cursor:pointer;color:var(--silver);
+    border:1px solid var(--line);border-radius:8px;font-size:1.2rem;line-height:1;
+  }
+  .navclose:hover{color:var(--white);border-color:var(--cyan2);}
+
   /* ── HERO ── */
   .hero{
     position:relative;min-height:100vh;display:flex;align-items:center;
@@ -284,9 +297,17 @@
 
   /* ── responsive ── */
   @media (max-width:980px){
-    nav.mainnav{position:fixed;top:0;right:0;height:100vh;width:280px;background:rgba(5,13,26,.98);border-left:1px solid var(--line);flex-direction:column;justify-content:center;align-items:flex-start;gap:26px;padding:40px;transform:translateX(100%);transition:transform .35s ease;}
+    nav.mainnav{
+      position:fixed;top:0;right:0;height:100vh;width:min(320px,82vw);
+      background:#101f38;border-left:1px solid var(--line);
+      box-shadow:-20px 0 50px rgba(0,0,0,.45);
+      flex-direction:column;justify-content:flex-start;align-items:flex-start;gap:28px;
+      padding:100px 40px 40px;transform:translateX(100%);transition:transform .35s ease;
+      z-index:60;
+    }
     nav.mainnav.open{transform:translateX(0);}
     .navtoggle{display:flex;}
+    .navclose{display:flex;}
     .hero-grid,.about-grid,.contact-grid{grid-template-columns:1fr;}
     .hero-visual{height:320px;order:-1;}
     .services-grid{grid-template-columns:1fr 1fr;}
@@ -332,6 +353,7 @@
     </a>
 
     <nav class="mainnav" id="mainNav">
+      <div class="navclose" id="navClose" aria-label="Fechar menu">✕</div>
       <a href="#sobre">Sobre</a>
       <a href="#solucoes">Soluções</a>
       <a href="#diferenciais">Diferenciais</a>
@@ -341,6 +363,7 @@
 
     <div class="navtoggle" id="navToggle" aria-label="Abrir menu"><span></span><span></span><span></span></div>
   </div>
+  <div class="nav-overlay" id="navOverlay"></div>
 </header>
 
 <!-- ══════════ HERO ══════════ -->
@@ -687,8 +710,14 @@
   // mobile nav toggle
   const navToggle = document.getElementById('navToggle');
   const mainNav = document.getElementById('mainNav');
-  navToggle.addEventListener('click', () => mainNav.classList.toggle('open'));
-  mainNav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => mainNav.classList.remove('open')));
+  const navClose = document.getElementById('navClose');
+  const navOverlay = document.getElementById('navOverlay');
+  function openNav(){ mainNav.classList.add('open'); navOverlay.classList.add('open'); document.body.classList.add('nav-locked'); }
+  function closeNav(){ mainNav.classList.remove('open'); navOverlay.classList.remove('open'); document.body.classList.remove('nav-locked'); }
+  navToggle.addEventListener('click', () => { mainNav.classList.contains('open') ? closeNav() : openNav(); });
+  navClose.addEventListener('click', closeNav);
+  navOverlay.addEventListener('click', closeNav);
+  mainNav.querySelectorAll('a').forEach(a => a.addEventListener('click', closeNav));
 
   // reveal on scroll
   const revealEls = document.querySelectorAll('.reveal');
