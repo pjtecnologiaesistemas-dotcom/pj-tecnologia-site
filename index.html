@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PJ Tecnologia e Sistemas | Controle de Acesso, Ponto e Gestão Operacional</title>
+<meta name="description" content="PJ Tecnologia e Sistemas desenvolve softwares sob medida para controle de acesso, ponto eletrônico, supervisão e gestão operacional do setor de segurança privada.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  :root{
+    --navy:#182b47;
+    --navy2:#1f3455;
+    --blue1:#1c4571;
+    --blue2:#1a63bd;
+    --cyan:#00c8f8;
+    --cyan2:#00eaff;
+    --silver:#dbe7fa;
+    --white:#f6faff;
+    --accent:#f0a500;
+    --line:rgba(0,200,248,.22);
+    --maxw:1180px;
+  }
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--navy);
+    color:var(--white);
+    font-family:'Rajdhani',sans-serif;
+    font-weight:400;
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;text-decoration:none;}
+  ul{list-style:none;}
+  img{max-width:100%;display:block;}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px;}
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace;
+    font-size:.72rem;letter-spacing:4px;text-transform:uppercase;
+    color:var(--cyan);display:flex;align-items:center;gap:10px;margin-bottom:14px;
+  }
+  .eyebrow::before{content:'';width:26px;height:1px;background:var(--cyan);display:inline-block;}
+  h1,h2,h3{font-family:'Orbitron',sans-serif;color:var(--white);letter-spacing:.5px;}
+  .h2{font-size:clamp(1.7rem,3.4vw,2.5rem);font-weight:800;line-height:1.25;margin-bottom:16px;}
+  .h2 span{color:var(--cyan2);}
+  .lead{font-size:1.08rem;font-weight:400;color:var(--silver);line-height:1.75;max-width:640px;}
+  .section{position:relative;padding:110px 0;}
+  .section-head{max-width:680px;margin-bottom:56px;}
+  .center{text-align:center;margin-left:auto;margin-right:auto;}
+
+  /* ── background circuit texture (reused from logo language) ── */
+  body::before{
+    content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+    background-image:
+      linear-gradient(rgba(0,200,248,.05) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(0,200,248,.05) 1px,transparent 1px);
+    background-size:44px 44px;
+  }
+
+  /* ── corner-bracket card language (from logo card) ── */
+  .bracket{position:relative;}
+  .bracket::before,.bracket::after{
+    content:'';position:absolute;width:16px;height:16px;border-color:var(--cyan);border-style:solid;opacity:.55;
+  }
+  .bracket::before{top:0;left:0;border-width:2px 0 0 2px;border-radius:4px 0 0 0;}
+  .bracket::after{bottom:0;right:0;border-width:0 2px 2px 0;border-radius:0 0 4px 0;}
+
+  /* ── HEADER ── */
+  header{
+    position:fixed;top:0;left:0;right:0;z-index:100;
+    padding:18px 0;
+    background:rgba(14,26,46,.45);
+    backdrop-filter:blur(14px);
+    -webkit-backdrop-filter:blur(14px);
+    border-bottom:1px solid transparent;
+    transition:background .3s ease,border-color .3s ease,padding .3s ease;
+  }
+  header.scrolled{
+    background:rgba(14,26,46,.9);
+    border-bottom:1px solid var(--line);
+    padding:12px 0;
+  }
+  header .wrap{display:flex;align-items:center;justify-content:space-between;}
+  .brand{display:flex;align-items:center;gap:12px;}
+  .brand-hex{width:38px;height:42px;position:relative;flex-shrink:0;}
+  .brand-hex svg{width:100%;height:100%;}
+  .brand-mono{font-family:'Orbitron',sans-serif;font-weight:900;font-size:.95rem;letter-spacing:-1px;}
+  .brand-mono span{color:var(--cyan2);}
+  .brand-text{font-family:'Orbitron',sans-serif;font-size:1rem;font-weight:700;letter-spacing:1.5px;line-height:1.15;}
+  .brand-text span{color:var(--cyan2);}
+  .brand-text small{display:block;font-family:'Rajdhani',sans-serif;font-size:.62rem;font-weight:500;letter-spacing:3.5px;color:var(--cyan);opacity:.7;text-transform:uppercase;margin-top:2px;}
+
+  nav.mainnav{display:flex;align-items:center;gap:38px;}
+  nav.mainnav a{
+    font-size:.9rem;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--silver);
+    position:relative;padding:4px 0;transition:color .2s;
+  }
+  nav.mainnav a::after{content:'';position:absolute;left:0;bottom:0;width:0;height:1px;background:var(--cyan2);transition:width .25s ease;}
+  nav.mainnav a:hover{color:var(--white);}
+  nav.mainnav a:hover::after{width:100%;}
+
+  .btn{
+    display:inline-flex;align-items:center;gap:8px;
+    font-family:'Rajdhani',sans-serif;font-weight:700;font-size:.85rem;letter-spacing:1.5px;text-transform:uppercase;
+    padding:13px 26px;border-radius:6px;cursor:pointer;border:1px solid transparent;transition:all .25s ease;white-space:nowrap;
+  }
+  .btn-primary{background:linear-gradient(135deg,var(--cyan2),var(--blue2));color:#03080f;box-shadow:0 0 0 1px rgba(0,200,248,.15),0 8px 24px rgba(0,150,220,.25);}
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 0 0 1px rgba(0,200,248,.3),0 12px 30px rgba(0,150,220,.4);}
+  .btn-ghost{border-color:rgba(0,200,248,.4);color:var(--white);background:rgba(0,200,248,.04);}
+  .btn-ghost:hover{border-color:var(--cyan2);background:rgba(0,200,248,.1);}
+
+  .navtoggle{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:6px;}
+  .navtoggle span{width:24px;height:2px;background:var(--cyan2);display:block;transition:.3s;}
+
+  /* ── HERO ── */
+  .hero{
+    position:relative;min-height:100vh;display:flex;align-items:center;
+    padding:150px 0 90px;overflow:hidden;
+  }
+  .hero-bg{position:absolute;inset:0;z-index:0;}
+  .hero-bg img{width:100%;height:100%;object-fit:cover;filter:saturate(.85) brightness(.55);}
+  .hero-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(100deg,rgba(14,26,46,.95) 30%,rgba(14,26,46,.72) 55%,rgba(14,26,46,.38) 100%);}
+  .hero::before{
+    content:'';position:absolute;inset:0;z-index:0;
+    background:radial-gradient(ellipse 65% 55% at 78% 30%,rgba(0,90,180,.32) 0%,transparent 65%),
+               radial-gradient(ellipse 50% 45% at 15% 85%,rgba(13,56,120,.28) 0%,transparent 65%);
+  }
+  .hero-grid{display:grid;grid-template-columns:1.05fr .8fr;gap:60px;align-items:center;position:relative;z-index:1;}
+  .hero h1{font-size:clamp(2.3rem,4.6vw,3.6rem);font-weight:800;line-height:1.15;margin-bottom:22px;}
+  .hero h1 .accent-line{display:block;color:var(--cyan2);font-size:.55em;letter-spacing:5px;font-weight:600;text-transform:uppercase;margin-bottom:14px;font-family:'JetBrains Mono',monospace;}
+  .hero h1 em{font-style:normal;background:linear-gradient(90deg,var(--cyan2),#7fd8ff);-webkit-background-clip:text;background-clip:text;color:transparent;}
+  .hero .lead{margin-bottom:36px;}
+  .hero-ctas{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:52px;}
+  .hero-stats{display:flex;gap:0;border-top:1px solid var(--line);padding-top:26px;max-width:520px;}
+  .hero-stats div{flex:1;padding-right:20px;}
+  .hero-stats strong{display:block;font-family:'Orbitron',sans-serif;font-size:1.5rem;color:var(--cyan2);font-weight:800;}
+  .hero-stats span{font-size:.78rem;letter-spacing:1px;color:var(--silver);opacity:.75;text-transform:uppercase;}
+
+  /* hero visual: hex network */
+  .hero-visual{position:relative;height:460px;display:flex;align-items:center;justify-content:center;}
+  .hex-orbit{position:relative;width:100%;height:100%;}
+  .hex-core{
+    position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+    width:190px;height:210px;
+  }
+  .hex-core svg{width:100%;height:100%;filter:drop-shadow(0 0 30px rgba(0,200,248,.5));animation:hexPulse 3.2s ease-in-out infinite;}
+  @keyframes hexPulse{0%,100%{filter:drop-shadow(0 0 18px rgba(0,200,248,.35));}50%{filter:drop-shadow(0 0 34px rgba(0,234,255,.65));}}
+  .hex-core .core-mono{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Orbitron',sans-serif;font-weight:900;font-size:2.6rem;color:var(--white);text-shadow:0 0 22px rgba(0,234,255,.6);}
+  .hex-core .core-mono span{color:var(--cyan2);}
+  .node{
+    position:absolute;width:46px;height:46px;border-radius:12px;
+    background:rgba(20,36,60,.85);border:1px solid var(--line);
+    display:flex;align-items:center;justify-content:center;font-size:1.2rem;
+    box-shadow:0 0 22px rgba(0,150,220,.18);
+    animation:floaty 5s ease-in-out infinite;
+  }
+  @keyframes floaty{0%,100%{transform:translateY(0);}50%{transform:translateY(-9px);}}
+  .node.n1{top:6%;left:10%;animation-delay:.2s;}
+  .node.n2{top:14%;right:4%;animation-delay:1.1s;}
+  .node.n3{bottom:20%;left:0;animation-delay:.6s;}
+  .node.n4{bottom:4%;right:16%;animation-delay:1.6s;}
+  .node.n5{top:50%;left:-2%;animation-delay:2.1s;}
+  .orbit-line{position:absolute;inset:0;}
+  .orbit-line svg{width:100%;height:100%;}
+
+  .scroll-cue{position:absolute;bottom:34px;left:50%;transform:translateX(-50%);z-index:1;display:flex;flex-direction:column;align-items:center;gap:8px;opacity:.55;}
+  .scroll-cue span{font-family:'JetBrains Mono',monospace;font-size:.62rem;letter-spacing:3px;text-transform:uppercase;color:var(--cyan);}
+  .scroll-cue .bar{width:1px;height:34px;background:linear-gradient(var(--cyan2),transparent);animation:scrollDown 1.8s ease-in-out infinite;}
+  @keyframes scrollDown{0%{opacity:0;transform:translateY(-6px);}50%{opacity:1;}100%{opacity:0;transform:translateY(10px);}}
+
+  /* ── reveal-on-scroll ── */
+  .reveal{opacity:0;transform:translateY(26px);transition:opacity .7s cubic-bezier(.22,1,.36,1),transform .7s cubic-bezier(.22,1,.36,1);}
+  .reveal.in{opacity:1;transform:translateY(0);}
+
+  /* ── SOBRE ── */
+  .about{background:linear-gradient(180deg,var(--navy) 0%,var(--navy2) 100%);border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
+  .about-grid{display:grid;grid-template-columns:.95fr 1.05fr;gap:70px;align-items:center;}
+  .about-panel{
+    position:relative;padding:38px;border-radius:16px;
+    background:linear-gradient(145deg,#1a3157 0%,#0e2140 100%);
+    border:1px solid var(--line);
+  }
+  .about-photo{
+    position:relative;border-radius:16px;overflow:hidden;border:1px solid var(--line);
+    height:220px;margin-bottom:20px;
+  }
+  .about-photo.about-photo-tall{height:400px;}
+  .about-photo img{width:100%;height:100%;object-fit:cover;filter:saturate(.9) brightness(.8);}
+  .about-photo::after{content:'';position:absolute;inset:0;background:linear-gradient(0deg,rgba(5,13,26,.85) 0%,transparent 55%);}
+  .about-photo span{position:absolute;left:16px;bottom:12px;font-family:'JetBrains Mono',monospace;font-size:.7rem;letter-spacing:2px;text-transform:uppercase;color:var(--cyan2);}
+  .about-tags{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px;}
+  .tag{
+    font-family:'JetBrains Mono',monospace;font-size:.72rem;letter-spacing:.5px;
+    padding:7px 14px;border:1px solid var(--line);border-radius:20px;color:var(--cyan);
+    background:rgba(0,200,248,.05);
+  }
+
+  /* ── SERVIÇOS ── */
+  .services-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;}
+  .svc-card{
+    border-radius:14px;overflow:hidden;
+    background:rgba(255,255,255,.02);
+    border:1px solid var(--line);
+    transition:transform .3s ease,border-color .3s ease,background .3s ease;
+  }
+  .svc-card:hover{transform:translateY(-6px);border-color:rgba(0,200,248,.4);}
+  .svc-photo{position:relative;height:170px;}
+  .svc-photo img{width:100%;height:100%;object-fit:cover;filter:saturate(.9) brightness(.75);}
+  .svc-photo::after{content:'';position:absolute;inset:0;background:linear-gradient(0deg,rgba(6,12,24,.95) 0%,rgba(6,12,24,.15) 65%);}
+  .svc-body{padding:26px 26px 30px;}
+  .svc-hex{width:48px;height:53px;margin:-46px 0 16px;position:relative;z-index:2;}
+  .svc-hex svg{width:100%;height:100%;}
+  .svc-hex .ico{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:1.3rem;}
+  .svc-card h3{font-size:1.1rem;font-weight:700;margin-bottom:10px;letter-spacing:.3px;}
+  .svc-card p{color:var(--silver);font-size:.94rem;line-height:1.65;margin-bottom:18px;}
+  .svc-list{display:flex;flex-direction:column;gap:9px;border-top:1px solid var(--line);padding-top:16px;}
+  .svc-list li{display:flex;gap:9px;align-items:flex-start;font-size:.85rem;color:var(--silver);line-height:1.5;}
+  .svc-list li::before{content:'';flex-shrink:0;width:6px;height:6px;margin-top:6px;border-radius:1px;background:var(--cyan2);box-shadow:0 0 6px rgba(0,234,255,.6);transform:rotate(45deg);}
+
+  /* ── DIFERENCIAIS ── */
+  .diff{background:var(--navy2);border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
+  .diff-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden;}
+  .diff-item{background:var(--navy2);padding:32px 30px;display:flex;gap:18px;align-items:flex-start;}
+  .diff-mark{font-family:'JetBrains Mono',monospace;color:var(--cyan2);font-size:.85rem;padding-top:3px;flex-shrink:0;}
+  .diff-item h4{font-family:'Orbitron',sans-serif;font-size:1rem;color:var(--white);margin-bottom:8px;letter-spacing:.3px;}
+  .diff-item p{color:var(--silver);font-size:.92rem;line-height:1.6;}
+
+  /* ── CTA BANNER ── */
+  .cta-banner{
+    position:relative;padding:80px 0;overflow:hidden;
+  }
+  .cta-bg{position:absolute;inset:0;z-index:0;}
+  .cta-bg img{width:100%;height:100%;object-fit:cover;filter:saturate(.8) brightness(.4);}
+  .cta-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(100deg,rgba(14,28,52,.93) 20%,rgba(18,42,76,.72) 60%,rgba(20,66,130,.52) 100%);}
+  .cta-banner::before{
+    content:'';position:absolute;inset:0;z-index:1;
+    background-image:linear-gradient(rgba(0,234,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(0,234,255,.05) 1px,transparent 1px);
+    background-size:34px 34px;
+    mask-image:radial-gradient(ellipse 70% 100% at 60% 50%,black,transparent);
+  }
+  .cta-inner{position:relative;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:30px;flex-wrap:wrap;}
+  .cta-inner h2{font-size:clamp(1.5rem,2.8vw,2.1rem);max-width:560px;}
+  .cta-inner .lead{margin:10px 0 0;max-width:520px;}
+
+  /* ── CONTATO ── */
+  .contact-grid{display:grid;grid-template-columns:.85fr 1.15fr;gap:60px;}
+  .contact-info h3{font-size:1.05rem;margin-bottom:6px;}
+  .contact-info .lead{margin-bottom:34px;}
+  .info-row{display:flex;gap:16px;padding:18px 0;border-top:1px solid var(--line);}
+  .info-row:last-child{border-bottom:1px solid var(--line);}
+  .info-ico{width:38px;height:38px;border-radius:9px;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--cyan2);font-size:1rem;}
+  .info-row strong{display:block;font-size:.95rem;color:var(--white);margin-bottom:2px;}
+  .info-row span{font-size:.88rem;color:var(--silver);}
+
+  .form-card{padding:36px;border-radius:16px;background:linear-gradient(145deg,#1a3157 0%,#0e2140 100%);border:1px solid var(--line);}
+  .form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;}
+  .field{display:flex;flex-direction:column;gap:7px;}
+  .field.full{grid-column:1 / -1;}
+  .field label{font-size:.76rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--cyan);font-family:'JetBrains Mono',monospace;}
+  .field input,.field select,.field textarea{
+    background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:8px;
+    padding:12px 14px;color:var(--white);font-family:'Rajdhani',sans-serif;font-size:.98rem;
+    outline:none;transition:border-color .2s,background .2s;
+  }
+  .field input:focus,.field select:focus,.field textarea:focus{border-color:var(--cyan2);background:rgba(0,200,248,.05);}
+  .field textarea{resize:vertical;min-height:110px;}
+  .form-note{font-size:.8rem;color:var(--silver);opacity:.6;margin-top:14px;}
+
+  /* ── FOOTER ── */
+  footer{background:#0c1a2e;border-top:1px solid var(--line);padding:70px 0 26px;}
+  .footer-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:44px;margin-bottom:56px;}
+  .footer-brand .brand{margin-bottom:16px;}
+  .footer-brand p{color:var(--silver);font-size:.9rem;line-height:1.7;max-width:280px;opacity:.85;}
+  .footer-col h5{font-family:'JetBrains Mono',monospace;font-size:.72rem;letter-spacing:2.5px;text-transform:uppercase;color:var(--cyan);margin-bottom:18px;}
+  .footer-col ul li{margin-bottom:11px;}
+  .footer-col ul a{font-size:.9rem;color:var(--silver);transition:color .2s;}
+  .footer-col ul a:hover{color:var(--cyan2);}
+  .footer-bottom{border-top:1px solid var(--line);padding-top:26px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;}
+  .footer-bottom p{font-size:.8rem;color:var(--silver);opacity:.6;}
+  .footer-social{display:flex;gap:12px;}
+  .footer-social a{width:34px;height:34px;border-radius:8px;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:.85rem;color:var(--silver);transition:.2s;}
+  .footer-social a:hover{border-color:var(--cyan2);color:var(--cyan2);}
+
+  /* ── responsive ── */
+  @media (max-width:980px){
+    nav.mainnav{position:fixed;top:0;right:0;height:100vh;width:280px;background:rgba(5,13,26,.98);border-left:1px solid var(--line);flex-direction:column;justify-content:center;align-items:flex-start;gap:26px;padding:40px;transform:translateX(100%);transition:transform .35s ease;}
+    nav.mainnav.open{transform:translateX(0);}
+    .navtoggle{display:flex;}
+    .hero-grid,.about-grid,.contact-grid{grid-template-columns:1fr;}
+    .hero-visual{height:320px;order:-1;}
+    .services-grid{grid-template-columns:1fr 1fr;}
+    .diff-grid{grid-template-columns:1fr;}
+    .footer-grid{grid-template-columns:1fr 1fr;}
+  }
+  @media (max-width:640px){
+    .section{padding:80px 0;}
+    .services-grid{grid-template-columns:1fr;}
+    .form-row{grid-template-columns:1fr;}
+    .hero-stats{flex-wrap:wrap;row-gap:18px;}
+    .hero-stats div{flex:1 1 45%;}
+    .footer-grid{grid-template-columns:1fr;gap:34px;}
+    .cta-inner{flex-direction:column;align-items:flex-start;}
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    *{animation:none !important;transition:none !important;}
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════ HEADER ══════════ -->
+<header id="siteHeader">
+  <div class="wrap">
+    <a href="#topo" class="brand">
+      <div class="brand-hex">
+        <svg viewBox="0 0 100 110" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="bhG" x1="0" y1="0" x2="100" y2="110" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#0d3878"/><stop offset="100%" stop-color="#051225"/>
+            </linearGradient>
+            <linearGradient id="bhS" x1="0" y1="0" x2="100" y2="110" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#00eaff"/><stop offset="100%" stop-color="#00a0cc"/>
+            </linearGradient>
+          </defs>
+          <polygon points="50,4 96,28 96,82 50,106 4,82 4,28" fill="url(#bhG)" stroke="url(#bhS)" stroke-width="4"/>
+        </svg>
+        <div class="brand-mono" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;">P<span>J</span></div>
+      </div>
+      <div class="brand-text">PJ <span>·</span> TECNOLOGIA<small>e Sistemas</small></div>
+    </a>
+
+    <nav class="mainnav" id="mainNav">
+      <a href="#sobre">Sobre</a>
+      <a href="#solucoes">Soluções</a>
+      <a href="#diferenciais">Diferenciais</a>
+      <a href="#contato">Contato</a>
+      <a href="#contato" class="btn btn-primary" style="margin-left:6px;">Falar com especialista</a>
+    </nav>
+
+    <div class="navtoggle" id="navToggle" aria-label="Abrir menu"><span></span><span></span><span></span></div>
+  </div>
+</header>
+
+<!-- ══════════ HERO ══════════ -->
+<section class="hero" id="topo">
+  <div class="hero-bg">
+    <img src="https://images.unsplash.com/photo-1743947197290-445abda983c9?w=1600&q=75&auto=format&fit=crop" alt="Entrada moderna de edifício com controle de acesso" loading="eager">
+  </div>
+  <div class="wrap hero-grid">
+    <div class="reveal in">
+      <h1><span class="accent-line">Tecnologia para segurança & operações</span>Sistemas sob medida que colocam <em>controle</em> em cada acesso, ponto e posto.</h1>
+      <p class="lead">A PJ Tecnologia e Sistemas projeta e mantém plataformas web para controle de acesso, ponto eletrônico, supervisão de rondas e gestão de equipes — construídas para a rotina real de quem opera segurança patrimonial no dia a dia.</p>
+      <div class="hero-ctas">
+        <a href="#solucoes" class="btn btn-primary">Conhecer as soluções</a>
+        <a href="#contato" class="btn btn-ghost">Solicitar uma demonstração</a>
+      </div>
+      <div class="hero-stats">
+        <div><strong>100%</strong><span>Sob medida</span></div>
+        <div><strong>Cloud</strong><span>Sync em tempo real</span></div>
+        <div><strong>24/7</strong><span>Sistemas em operação</span></div>
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <div class="hex-orbit">
+        <div class="orbit-line">
+          <svg viewBox="0 0 460 460" fill="none">
+            <circle cx="230" cy="230" r="180" stroke="rgba(0,200,248,.14)" stroke-width="1" stroke-dasharray="2 8"/>
+          </svg>
+        </div>
+        <div class="hex-core">
+          <svg viewBox="0 0 100 110" fill="none">
+            <defs>
+              <linearGradient id="hcG" x1="0" y1="0" x2="100" y2="110" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#0d3878"/><stop offset="100%" stop-color="#051225"/>
+              </linearGradient>
+              <linearGradient id="hcS" x1="0" y1="0" x2="100" y2="110" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#00eaff"/><stop offset="50%" stop-color="#0088cc"/><stop offset="100%" stop-color="#00c8f8"/>
+              </linearGradient>
+            </defs>
+            <polygon points="50,4 96,28 96,82 50,106 4,82 4,28" fill="url(#hcG)" stroke="url(#hcS)" stroke-width="2.5"/>
+            <polygon points="50,12 88,33 88,78 50,98 12,78 12,33" fill="none" stroke="rgba(0,200,248,.18)" stroke-width="1"/>
+          </svg>
+          <div class="core-mono">P<span>J</span></div>
+        </div>
+        <div class="node n1">🔐</div>
+        <div class="node n2">🕐</div>
+        <div class="node n3">📡</div>
+        <div class="node n4">🛡️</div>
+        <div class="node n5">📊</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="scroll-cue"><span>Scroll</span><div class="bar"></div></div>
+</section>
+
+<!-- ══════════ SOBRE ══════════ -->
+<section class="section about" id="sobre">
+  <div class="wrap about-grid">
+    <div class="reveal">
+      <div class="about-photo about-photo-tall">
+        <img src="https://images.unsplash.com/photo-1758448721205-8465cebc26af?w=1000&q=75&auto=format&fit=crop" alt="Ambiente corporativo moderno com controle de acesso">
+        <span>// ambiente real de operação</span>
+      </div>
+      <div class="about-tags">
+        <span class="tag">#controle-de-acesso</span>
+        <span class="tag">#ponto-eletronico</span>
+        <span class="tag">#supervisao</span>
+        <span class="tag">#gestao-de-postos</span>
+      </div>
+    </div>
+
+    <div class="reveal">
+      <div class="eyebrow">Quem somos</div>
+      <h2 class="h2">Desenvolvemos os sistemas que sustentam a operação de segurança, <span>não só o software.</span></h2>
+      <p class="lead">Atuamos junto a empresas de segurança patrimonial e serviços, projetando plataformas que acompanham a rotina de portaria, supervisão e RH operacional — de condomínios a postos de grande porte.</p>
+      <p class="lead" style="margin-top:16px;">Cada sistema nasce da operação real: entendemos o fluxo de trabalho de porteiros, supervisores e gestores antes de escrever a primeira linha de código, e mantemos evolução contínua conforme a operação muda.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ SOLUÇÕES ══════════ -->
+<section class="section" id="solucoes">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">Soluções</div>
+      <h2 class="h2">Uma plataforma para cada frente da <span>operação de segurança.</span></h2>
+      <p class="lead">Sistemas independentes que conversam entre si — cada um resolvendo um problema específico da rotina operacional.</p>
+    </div>
+
+    <div class="services-grid">
+      <div class="svc-card reveal">
+        <div class="svc-photo"><img src="https://images.unsplash.com/photo-1523121766138-78320028206b?w=700&q=70&auto=format&fit=crop" alt="Leitor de cartão de acesso"></div>
+        <div class="svc-body">
+        <div class="svc-hex"><svg viewBox="0 0 100 110"><polygon points="50,4 96,28 96,82 50,106 4,82 4,28" fill="rgba(0,200,248,.08)" stroke="#00c8f8" stroke-width="2.5"/></svg><div class="ico">🔐</div></div>
+        <h3>Controle de Acesso</h3>
+        <p>Gestão completa de moradores, visitantes, veículos e dispositivos em condomínios e áreas restritas, com sincronização em nuvem e histórico de movimentações.</p>
+        <ul class="svc-list">
+          <li>Cadastro de moradores, unidades, veículos e dispositivos</li>
+          <li>Wizard de entrada de visitantes com busca rápida</li>
+          <li>Integração com leitores e reconhecimento facial</li>
+          <li>Sincronização em nuvem via Firebase Firestore</li>
+          <li>Histórico completo de entradas e saídas</li>
+        </ul>
+        </div>
+      </div>
+      <div class="svc-card reveal">
+        <div class="svc-photo"><img src="https://images.unsplash.com/photo-1667453466805-75bbf36e8707?w=700&q=70&auto=format&fit=crop" alt="Registro de ponto pelo celular"></div>
+        <div class="svc-body">
+        <div class="svc-hex"><svg viewBox="0 0 100 110"><polygon points="50,4 96,28 96,82 50,106 4,82 4,28" fill="rgba(0,200,248,.08)" stroke="#00c8f8" stroke-width="2.5"/></svg><div class="ico">🕐</div></div>
+        <h3>Ponto Eletrônico</h3>
+        <p>Registro de jornada com detecção automática de turno, cálculo de horas e histórico individual — pensado para equipes em escala 12x36 e afins.</p>
+        <ul class="svc-list">
+          <li>Detecção automática de turno por horário de entrada</li>
+          <li>Geração automática de lançamentos de hora extra</li>
+          <li>Bloqueio de marcações duplicadas</li>
+          <li>Histórico individual de jornada por colaborador</li>
+          <li>Exportação de relatórios em PDF e Excel</li>
+        </ul>
+        </div>
+      </div>
+      <div class="svc-card reveal">
+        <div class="svc-photo"><img src="https://images.unsplash.com/photo-1605810230434-7631ac76ec81?w=700&q=70&auto=format&fit=crop" alt="Sala de monitoramento com telas de supervisão"></div>
+        <div class="svc-body">
+        <div class="svc-hex"><svg viewBox="0 0 100 110"><polygon points="50,4 96,28 96,82 50,106 4,82 4,28" fill="rgba(0,200,248,.08)" stroke="#00c8f8" stroke-width="2.5"/></svg><div class="ico">📡</div></div>
+        <h3>Supervisão & Rondas</h3>
+        <p>Abertura e fechamento de turnos por múltiplos supervisores simultâneos, checklist de vistoria e acompanhamento de rotas em tempo real.</p>
+        <ul class="svc-list">
+          <li>Múltiplos supervisores com turnos simultâneos</li>
+          <li>Checklist de vistoria com registro fotográfico</li>
+          <li>Controle de posse do dispositivo por turno</li>
+          <li>Publicação de escala com um clique</li>
+          <li>Acompanhamento de rondas em tempo real</li>
+        </ul>
+        </div>
+      </div>
+      <div class="svc-card reveal">
+        <div class="svc-photo"><img src="https://images.unsplash.com/photo-1761707054382-6956707c3747?w=700&q=70&auto=format&fit=crop" alt="Cancela de acesso em portaria"></div>
+        <div class="svc-body">
+        <div class="svc-hex"><svg viewBox="0 0 100 110"><polygon points="50,4 96,28 96,82 50,106 4,82 4,28" fill="rgba(0,200,248,.08)" stroke="#00c8f8" stroke-width="2.5"/></svg><div class="ico">👥</div></div>
+        <h3>Gestão de Equipes e Postos</h3>
+        <p>Cadastro de colaboradores, escalas, cobertura de faltas e lançamento de folhas de trabalho — com exportação em PDF e Excel.</p>
+        <ul class="svc-list">
+          <li>Cadastro de colaboradores, equipes e postos</li>
+          <li>Lançamento de folhas de trabalho com filtros</li>
+          <li>Registro de cobertura de faltas com motivo</li>
+          <li>Layout de impressão com identidade da empresa</li>
+          <li>Painel responsivo para uso em campo</li>
+        </ul>
+        </div>
+      </div>
+      <div class="svc-card reveal">
+        <div class="svc-photo"><img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=700&q=70&auto=format&fit=crop" alt="Infraestrutura de servidores em nuvem"></div>
+        <div class="svc-body">
+        <div class="svc-hex"><svg viewBox="0 0 100 110"><polygon points="50,4 96,28 96,82 50,106 4,82 4,28" fill="rgba(0,200,248,.08)" stroke="#00c8f8" stroke-width="2.5"/></svg><div class="ico">☁️</div></div>
+        <h3>Infraestrutura em Nuvem</h3>
+        <p>Sincronização em tempo real via Firebase, funcionamento offline-first e apps que rodam direto do navegador, sem instalação complexa.</p>
+        <ul class="svc-list">
+          <li>Sincronização em tempo real com Firebase</li>
+          <li>Funcionamento offline-first com armazenamento local</li>
+          <li>Aplicações leves, sem instalação necessária</li>
+          <li>Acesso direto pelo navegador em qualquer dispositivo</li>
+          <li>Deploy e atualizações rápidas via Firebase Hosting</li>
+        </ul>
+        </div>
+      </div>
+      <div class="svc-card reveal">
+        <div class="svc-photo"><img src="https://images.unsplash.com/photo-1627227702786-f3268b95f980?w=700&q=70&auto=format&fit=crop" alt="Desenvolvimento de sistema sob medida"></div>
+        <div class="svc-body">
+        <div class="svc-hex"><svg viewBox="0 0 100 110"><polygon points="50,4 96,28 96,82 50,106 4,82 4,28" fill="rgba(0,200,248,.08)" stroke="#00c8f8" stroke-width="2.5"/></svg><div class="ico">🛠️</div></div>
+        <h3>Sistemas Sob Medida</h3>
+        <p>Desenvolvimento de novas ferramentas e módulos conforme a operação evolui — do primeiro protótipo à manutenção contínua.</p>
+        <ul class="svc-list">
+          <li>Levantamento do fluxo real de trabalho do cliente</li>
+          <li>Protótipo funcional em poucos dias</li>
+          <li>Ajustes e novos módulos sob demanda</li>
+          <li>Manutenção contínua e correção de bugs</li>
+          <li>Suporte direto com quem desenvolve o sistema</li>
+        </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ DIFERENCIAIS ══════════ -->
+<section class="section diff" id="diferenciais">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">Diferenciais</div>
+      <h2 class="h2">Por que empresas de segurança escolhem a <span>PJ Tecnologia.</span></h2>
+    </div>
+
+    <div class="diff-grid reveal">
+      <div class="diff-item">
+        <div class="diff-mark">01</div>
+        <div><h4>Desenvolvimento sob medida</h4><p>Cada sistema é construído a partir do fluxo real de trabalho do cliente, não de um template genérico de mercado.</p></div>
+      </div>
+      <div class="diff-item">
+        <div class="diff-mark">02</div>
+        <div><h4>Suporte direto com quem desenvolve</h4><p>Sem central de atendimento terceirizada — o contato é direto com quem conhece o sistema por dentro.</p></div>
+      </div>
+      <div class="diff-item">
+        <div class="diff-mark">03</div>
+        <div><h4>Evolução contínua</h4><p>Os sistemas recebem ajustes e novas funcionalidades conforme a operação do cliente muda, sem paralisações longas.</p></div>
+      </div>
+      <div class="diff-item">
+        <div class="diff-mark">04</div>
+        <div><h4>Interface pensada para o dia a dia</h4><p>Telas simples o bastante para porteiros e supervisores usarem sem treinamento extenso.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ CTA BANNER ══════════ -->
+<section class="cta-banner reveal">
+  <div class="cta-bg">
+    <img src="https://images.unsplash.com/photo-1765710475256-1708882da66e?w=1400&q=70&auto=format&fit=crop" alt="Cancela de acesso profissional">
+  </div>
+  <div class="wrap cta-inner">
+    <div>
+      <h2>Pronto para modernizar a tecnologia da sua operação?</h2>
+      <p class="lead">Conte o que sua equipe precisa hoje — a gente projeta o sistema junto com você.</p>
+    </div>
+    <a href="https://wa.me/5519997097145?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20os%20sistemas%20da%20PJ%20Tecnologia." class="btn btn-primary" target="_blank" rel="noopener">Iniciar conversa</a>
+  </div>
+</section>
+
+<!-- ══════════ CONTATO ══════════ -->
+<section class="section" id="contato">
+  <div class="wrap contact-grid">
+    <div class="reveal">
+      <div class="eyebrow">Contato</div>
+      <h3 class="h2" style="font-size:1.7rem;">Vamos falar sobre o seu sistema.</h3>
+      <p class="lead">Preencha o formulário ou fale direto pelos canais abaixo. Retorno em até 1 dia útil.</p>
+
+      <div class="info-row">
+        <div class="info-ico">📍</div>
+        <div><strong>Atendimento</strong><span>Mogi Mirim / Mogi Guaçu — SP</span></div>
+      </div>
+      <div class="info-row">
+        <div class="info-ico">✉️</div>
+        <div><strong>E-mail</strong><span>contato@pjtecnologia.com.br</span></div>
+      </div>
+      <div class="info-row">
+        <div class="info-ico">📞</div>
+        <div><strong>WhatsApp</strong><span><a href="https://wa.me/5519997097145" target="_blank" rel="noopener">(19) 99709-7145</a></span></div>
+      </div>
+      <div class="info-row">
+        <div class="info-ico">☎️</div>
+        <div><strong>Comercial</strong><span><a href="tel:+5519989977113">(19) 98997-7113</a></span></div>
+      </div>
+    </div>
+
+    <div class="form-card reveal bracket">
+      <form id="contactForm" onsubmit="return false;">
+        <div class="form-row">
+          <div class="field"><label>Nome</label><input type="text" placeholder="Seu nome" required></div>
+          <div class="field"><label>Empresa</label><input type="text" placeholder="Nome da empresa"></div>
+        </div>
+        <div class="form-row">
+          <div class="field"><label>E-mail</label><input type="email" placeholder="voce@empresa.com" required></div>
+          <div class="field"><label>Telefone</label><input type="tel" placeholder="(00) 00000-0000"></div>
+        </div>
+        <div class="form-row">
+          <div class="field full">
+            <label>Sistema de interesse</label>
+            <select>
+              <option>Controle de Acesso</option>
+              <option>Ponto Eletrônico</option>
+              <option>Supervisão & Rondas</option>
+              <option>Gestão de Equipes</option>
+              <option>Sistema sob medida</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="field full"><label>Mensagem</label><textarea placeholder="Conte um pouco sobre a sua operação e o que você precisa."></textarea></div>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;">Enviar mensagem</button>
+        <p class="form-note">Este formulário é apenas visual — conecte-o a e-mail, WhatsApp API ou Firebase para receber os envios.</p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ FOOTER ══════════ -->
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="brand">
+          <div class="brand-hex">
+            <svg viewBox="0 0 100 110"><polygon points="50,4 96,28 96,82 50,106 4,82 4,28" fill="#0d3878" stroke="#00c8f8" stroke-width="4"/></svg>
+            <div class="brand-mono" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;">P<span>J</span></div>
+          </div>
+          <div class="brand-text">PJ <span>·</span> TECNOLOGIA<small>e Sistemas</small></div>
+        </div>
+        <p>Inovação que conecta. Tecnologia que transforma. Sistemas sob medida para o setor de segurança privada.</p>
+      </div>
+      <div class="footer-col">
+        <h5>Soluções</h5>
+        <ul>
+          <li><a href="#solucoes">Controle de Acesso</a></li>
+          <li><a href="#solucoes">Ponto Eletrônico</a></li>
+          <li><a href="#solucoes">Supervisão & Rondas</a></li>
+          <li><a href="#solucoes">Gestão de Equipes</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Empresa</h5>
+        <ul>
+          <li><a href="#sobre">Sobre</a></li>
+          <li><a href="#diferenciais">Diferenciais</a></li>
+          <li><a href="#contato">Contato</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Contato</h5>
+        <ul>
+          <li><a href="mailto:contato@pjtecnologia.com.br">contato@pjtecnologia.com.br</a></li>
+          <li><a href="#">Mogi Mirim / Mogi Guaçu — SP</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p id="copyYear">© 2026 PJ Tecnologia e Sistemas. Todos os direitos reservados.</p>
+      <div class="footer-social">
+        <a href="#" aria-label="LinkedIn">in</a>
+        <a href="#" aria-label="Instagram">◎</a>
+        <a href="https://wa.me/5519997097145" target="_blank" rel="noopener" aria-label="WhatsApp">✆</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // header on scroll
+  const header = document.getElementById('siteHeader');
+  window.addEventListener('scroll', () => {
+    header.classList.toggle('scrolled', window.scrollY > 30);
+  });
+
+  // mobile nav toggle
+  const navToggle = document.getElementById('navToggle');
+  const mainNav = document.getElementById('mainNav');
+  navToggle.addEventListener('click', () => mainNav.classList.toggle('open'));
+  mainNav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => mainNav.classList.remove('open')));
+
+  // reveal on scroll
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: 0.15 });
+  revealEls.forEach(el => io.observe(el));
+
+  // dynamic year
+  document.getElementById('copyYear').textContent = `© ${new Date().getFullYear()} PJ Tecnologia e Sistemas. Todos os direitos reservados.`;
+
+  // demo form submit
+  document.getElementById('contactForm').addEventListener('submit', () => {
+    alert('Formulário de demonstração — conecte a um envio real (e-mail, WhatsApp API ou Firebase) para receber mensagens.');
+  });
+</script>
+
+</body>
+</html>
